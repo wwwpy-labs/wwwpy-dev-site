@@ -1,0 +1,3 @@
+[submodule "pelican-site/themes/blue-penguin-dark"]
+	path = pelican-site/themes/blue-penguin-dark
+	url = https://github.com/tcarwash/blue-penguin-dark.git
