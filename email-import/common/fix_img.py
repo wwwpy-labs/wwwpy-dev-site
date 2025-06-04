@@ -6,19 +6,30 @@ from typing import Tuple
 
 @dataclass
 class Link:
-    new_alt: str
+    new_src: str
     src: str
     location: Tuple[int, int] = (0, 0)
 
 
 class Links(UserList[Link]):
     @property
-    def new_alt_list(self) -> list[str]:
-        return [link.new_alt for link in self.data]
+    def new_src_list(self) -> list[str]:
+        return [link.new_src for link in self.data]
 
     @property
     def only_src_list(self) -> list[str]:
         return [link.src for link in self.data]
+
+
+@dataclass
+class FixImg:
+    html: str
+    resource_prefix: str
+    new_html: str = ''
+    links: Links[Link] = field(default_factory=Links)
+
+    def __post_init__(self):
+        compute_calculated_fields(self)
 
 
 def extract_img_alt_src(tag: str) -> tuple[str, str]:
@@ -30,7 +41,8 @@ def extract_img_alt_src(tag: str) -> tuple[str, str]:
     return alt, src
 
 
-def compute_links(html, resource_prefix) -> Links[Link]:
+def compute_calculated_fields(fix_img: FixImg) -> None:
+    html, resource_prefix = fix_img.html, fix_img.resource_prefix
     # Find all <img ...> tags and their positions
     img_matches = list(re.finditer(r'<img[^>]*>', html))
     alt_counts = defaultdict(int)
@@ -53,14 +65,4 @@ def compute_links(html, resource_prefix) -> Links[Link]:
         else:
             new_alt = ''
         result.append(Link(new_alt, src, location))
-    return Links(result)
-
-
-@dataclass
-class FixImg:
-    html: str
-    resource_prefix: str
-    links: Links[Link] = field(default_factory=Links)
-
-    def __post_init__(self):
-        self.links = compute_links(self.html, self.resource_prefix)
+    fix_img.links = Links(result)

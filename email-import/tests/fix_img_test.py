@@ -21,9 +21,9 @@ _html = """
 def test_fix_img():
     target = FixImg(_html, 'p1-')
 
-    assert target.links.new_alt_list == [link.new_alt for link in target.links]
+    assert target.links.new_src_list == [link.new_src for link in target.links]
 
-    assert target.links.new_alt_list == [
+    assert target.links.new_src_list == [
         'p1-image-00.png',
         'p1-logger-levels.gif',
         'p1-image-01.png',
@@ -47,7 +47,7 @@ def test_no_src_and_no_alt_should_not_fail():
 
     target = FixImg(html, 'p1-')
 
-    assert target.links.new_alt_list == ['', '']
+    assert target.links.new_src_list == ['', '']
     assert target.links.only_src_list == ['', '']
 
 
@@ -59,3 +59,9 @@ def test_location():
     assert target.links[1].location == (23, 38)
 
 
+def test_new_html__plain_case():
+    html = "<br><img alt='image.png' src='https://wwwpy.dev/1'><link>"
+    target = FixImg(html, 'p1-')
+
+    # we generate an img with only the new src
+    assert target.new_html == '<br><img src="p1-image-00.png"><link>'
