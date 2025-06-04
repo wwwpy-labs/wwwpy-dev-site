@@ -65,8 +65,18 @@ def test_new_html__plain_case():
     target = FixImg(html, 'p1-')
 
     # we generate an img with only the new src
-    # assert target.new_html == '<br><img src="p1-image-00.png"><link>'
     assert target.new_html == (
         '<br><img src="p1-image-00.png"><link>'
         '<br><img src="p1-image-01.png">uff'
+    )
+
+def test_new_html__width_height():
+    html = ("""<br><img alt='image.png' src='https://wwwpy.dev/1' width='123' height="45"><link>"""
+            """<br><img alt='image.png' src='https://wwwpy.dev/2' width="67" height='89'><link>uff""")
+    target = FixImg(html, 'p1-')
+
+    # we need also to keep width and height
+    assert target.new_html == (
+        '<br><img src="p1-image-00.png" width="123" height="45"><link>'
+        '<br><img src="p1-image-01.png" width="67" height="89"><link>uff'
     )
