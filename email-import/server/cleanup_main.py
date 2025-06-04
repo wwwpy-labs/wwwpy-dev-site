@@ -4,6 +4,7 @@ from pathlib import Path
 from tempfile import mkdtemp
 
 from common.cleanuplib import cleanup
+from common.fix_img import FixImg
 
 
 def main():
@@ -15,8 +16,9 @@ def main():
             print(f'Cleaning {item}')
             content = item.read_text()
             clean_content = cleanup(content)
+            fix_img = FixImg(clean_content, resource_prefix=item.stem + '--')
             item_tmp = Path(cleanup_tmp) / item.name
-            item_tmp.write_text(clean_content)
+            item_tmp.write_text(fix_img.new_html)
 
     commit_folder(cleanup_tmp, uploads)
 
