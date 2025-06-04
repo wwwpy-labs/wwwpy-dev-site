@@ -44,7 +44,16 @@ class FixImg:
 
     @property
     def recap_img_html(self) -> str:
-        return ''
+        # Recap: <img src="original_src" alt="new_src" width="..." height="...">
+        parts = []
+        for link in self.links:
+            attrs = [f'src="{link.src}"', f'alt="{link.new_src}"']
+            if link.width:
+                attrs.append(f'width="{link.width}"')
+            if link.height:
+                attrs.append(f'height={link.height}"')
+            parts.append(f'<img {" ".join(attrs)}>')
+        return "\n".join(parts)
 
 
 def extract_img_alt_src(tag: str) -> tuple[str, str]:

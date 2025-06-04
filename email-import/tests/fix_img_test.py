@@ -101,3 +101,5 @@ def test_recap_img_html():
 
     assert """<img src="https://wwwpy.dev/1" alt="p1-image-00.png" width="123" height=45">""" in recap_img_html
     assert """<img src="https://wwwpy.dev/2" alt="p1-image-01.png" width="67" height=89">""" in recap_img_html
+
+    assert '\n<img' in recap_img_html  # Ensure that the recap is multiline
