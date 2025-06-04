@@ -7,6 +7,9 @@ requires-python = ">=3.13"
 dependencies = [
     "beautifulsoup4>=4.13.4",
     "lxml>=5.4.0",
+    "playwright>=1.52.0",
     "pytest>=8.3.5",
+    "pytest-playwright>=0.7.0",
+    "pytest-xvirt>=0.3.1",
     "wwwpy>=0.1.84",
 ]
