@@ -76,7 +76,7 @@ def compute_calculated_fields(fix_img: FixImg) -> None:
         result.append(Link(alt, src, (start, end), width, height, ''))
 
     for link in result:
-        alt, src, location, width, height = link.alt, link.src, link.location, link.width, link.height
+        alt, src = link.alt, link.src
         if alt and alt_counts[alt] > 1:
             idx = alt_indices[alt]
             new_src = f"{resource_prefix}{alt.replace('.', f'-{idx:02}.')}"
