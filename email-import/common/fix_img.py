@@ -34,11 +34,13 @@ class FixImg:
 
 def extract_img_alt_src(tag: str) -> tuple[str, str]:
     """Extract alt and src attributes from an <img> tag, return ('', '') if missing."""
-    alt_match = re.search(r'alt=["\']([^"\']*)["\']', tag)
-    src_match = re.search(r'src=["\']([^"\']*)["\']', tag)
-    alt = alt_match.group(1) if alt_match else ''
-    src = src_match.group(1) if src_match else ''
-    return alt, src
+    return extract_attribute_from_snippet(tag, 'alt'), extract_attribute_from_snippet(tag, 'src')
+
+
+def extract_attribute_from_snippet(snippet: str, attr: str) -> str:
+    """Extract the value of a specific attribute from an HTML snippet."""
+    match = re.search(rf'{attr}=["\']([^"\']*)["\']', snippet)
+    return match.group(1) if match else ''
 
 
 def compute_calculated_fields(fix_img: FixImg) -> None:
@@ -51,7 +53,8 @@ def compute_calculated_fields(fix_img: FixImg) -> None:
     for match in img_matches:
         tag = match.group(0)
         start, end = match.start(), match.end()
-        alt, src = extract_img_alt_src(tag)
+        alt = extract_attribute_from_snippet(tag, 'alt')
+        src = extract_attribute_from_snippet(tag, 'src')
         img_info.append((alt, src, (start, end)))
         alt_counts[alt] += 1
     result = []
@@ -77,4 +80,3 @@ def compute_calculated_fields(fix_img: FixImg) -> None:
         last_idx = end
     new_html_parts.append(html[last_idx:])
     fix_img.new_html = ''.join(new_html_parts)
-
