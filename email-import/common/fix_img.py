@@ -42,6 +42,10 @@ class FixImg:
     def __post_init__(self):
         compute_calculated_fields(self)
 
+    @property
+    def recap_img_html(self) -> str:
+        return ''
+
 
 def extract_img_alt_src(tag: str) -> tuple[str, str]:
     """Extract alt and src attributes from an <img> tag, return ('', '') if missing."""

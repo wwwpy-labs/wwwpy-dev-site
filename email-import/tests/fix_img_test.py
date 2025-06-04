@@ -90,3 +90,14 @@ def test_new_html__width_height_in_new_html():
         '<br><img src="p1-image-00.png" width="123" height="45"><link>'
         '<br><img src="p1-image-01.png" width="67" height="89"><link>uff'
     )
+
+
+def test_recap_img():
+    html = ("""<br><img alt='image.png' src='https://wwwpy.dev/1' width='123' height="45"><link>"""
+            """<br><img alt='image.png' src='https://wwwpy.dev/2' width="67" height='89'><link>uff""")
+
+    target = FixImg(html, 'p1-')
+    recap_img_html = target.recap_img_html
+
+    assert """<img src="https://wwwpy.dev/1" alt="p1-image-00.png" width="123" height=45">""" in recap_img_html
+    assert """<img src="https://wwwpy.dev/2" alt="p1-image-01.png" width="67" height=89">""" in recap_img_html
