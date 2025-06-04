@@ -1,7 +1,6 @@
 # language=html
-from dataclasses import dataclass, field
 
-from common.fix_img import FixImg, Link
+from common.fix_img import FixImg
 
 html = """
 <div><img alt="image.png" class="CToWUd a6T" data-bit="iit" data-image-whitelisted="" height="303"
@@ -20,12 +19,12 @@ html = """
               """
 
 
-
 def test_fix_img():
     target = FixImg(html, 'p1-')
 
-    assert target.links == [
-        Link('p1-image-00.png'),
-        Link('p1-logger-levels.gif'),
-        Link('p1-image-01.png'),
+    only_new_alt = [link.new_alt for link in target.links]
+    assert only_new_alt == [
+        'p1-image-00.png',
+        'p1-logger-levels.gif',
+        'p1-image-01.png',
     ]
