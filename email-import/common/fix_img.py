@@ -65,10 +65,12 @@ def compute_calculated_fields(fix_img: FixImg) -> None:
         start, end = match.start(), match.end()
         alt = extract_attribute_from_snippet(tag, 'alt')
         src = extract_attribute_from_snippet(tag, 'src')
-        img_info.append((alt, src, (start, end)))
+        width = extract_attribute_from_snippet(tag, 'width')
+        height = extract_attribute_from_snippet(tag, 'height')
+        img_info.append((alt, src, (start, end), width, height))
         alt_counts[alt] += 1
     result = []
-    for alt, src, location in img_info:
+    for alt, src, location, width, height in img_info:
         if alt and alt_counts[alt] > 1:
             idx = alt_indices[alt]
             new_src = f"{resource_prefix}{alt.replace('.', f'-{idx:02}.')}"
@@ -77,7 +79,7 @@ def compute_calculated_fields(fix_img: FixImg) -> None:
             new_src = f"{resource_prefix}{alt}"
         else:
             new_src = ''
-        result.append(Link(new_src, src, location))
+        result.append(Link(new_src, src, location, width, height))
     fix_img.links = Links(result)
 
     # Generate new_html: replace each <img ...> with <img src="new_src">
