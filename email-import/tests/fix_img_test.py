@@ -49,3 +49,13 @@ def test_no_src_and_no_alt_should_not_fail():
 
     assert target.links.new_alt_list == ['', '']
     assert target.links.only_src_list == ['', '']
+
+
+def test_location():
+    html = "<br><img width='3'><hr><img width='4'><link>"
+    target = FixImg(html, 'p1-')
+
+    assert target.links[0].location == (4, 19)
+    assert target.links[1].location == (23, 38)
+
+
