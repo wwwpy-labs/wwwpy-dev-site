@@ -92,7 +92,7 @@ def test_new_html__width_height_in_new_html():
     )
 
 
-def test_recap_img():
+def test_recap_img_html():
     html = ("""<br><img alt='image.png' src='https://wwwpy.dev/1' width='123' height="45"><link>"""
             """<br><img alt='image.png' src='https://wwwpy.dev/2' width="67" height='89'><link>uff""")
 
