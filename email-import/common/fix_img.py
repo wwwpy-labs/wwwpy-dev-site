@@ -53,6 +53,11 @@ def extract_attribute_from_snippet(snippet: str, attr: str) -> str:
     return match.group(1) if match else ''
 
 
+def extract_attribute(tag: str, *attrs: str) -> tuple[str, ...]:
+    """Extract multiple attributes from an HTML tag."""
+    return tuple(extract_attribute_from_snippet(tag, attr) for attr in attrs)
+
+
 def compute_calculated_fields(fix_img: FixImg) -> None:
     html, resource_prefix = fix_img.html, fix_img.resource_prefix
     # Find all <img ...> tags and their positions
@@ -63,10 +68,7 @@ def compute_calculated_fields(fix_img: FixImg) -> None:
     for match in img_matches:
         tag = match.group(0)
         start, end = match.start(), match.end()
-        alt = extract_attribute_from_snippet(tag, 'alt')
-        src = extract_attribute_from_snippet(tag, 'src')
-        width = extract_attribute_from_snippet(tag, 'width')
-        height = extract_attribute_from_snippet(tag, 'height')
+        alt, src, width, height = extract_attribute(tag, 'alt', 'src', 'width', 'height')
         img_info.append((alt, src, (start, end), width, height))
         alt_counts[alt] += 1
     result = []
