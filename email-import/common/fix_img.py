@@ -8,7 +8,9 @@ from typing import Tuple
 class Link:
     new_src: str
     src: str
-    location: Tuple[int, int] = (0, 0)
+    location: Tuple[int, int]
+    width: str = ''
+    height: str = ''
 
 
 class Links(UserList[Link]):
@@ -19,6 +21,14 @@ class Links(UserList[Link]):
     @property
     def only_src_list(self) -> list[str]:
         return [link.src for link in self.data]
+
+    @property
+    def only_width_list(self) -> list[str]:
+        return [link.width for link in self.data]
+
+    @property
+    def only_height_list(self) -> list[str]:
+        return [link.height for link in self.data]
 
 
 @dataclass

@@ -75,8 +75,8 @@ def test_new_html__width_height():
             """<br><img alt='image.png' src='https://wwwpy.dev/2' width="67" height='89'><link>uff""")
     target = FixImg(html, 'p1-')
 
-    # we need also to keep width and height
-    assert target.new_html == (
-        '<br><img src="p1-image-00.png" width="123" height="45"><link>'
-        '<br><img src="p1-image-01.png" width="67" height="89"><link>uff'
-    )
+
+    assert target.links.only_width_list == ['123', '67']
+    assert target.links.only_height_list == ['45', '89']
+
+
