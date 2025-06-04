@@ -1,8 +1,7 @@
-# language=html
-
 from common.fix_img import FixImg
 
-html = """
+# language=html
+_html = """
 <div><img alt="image.png" class="CToWUd a6T" data-bit="iit" data-image-whitelisted="" height="303"
               src="https://wwwpy.dev/1"
               style="cursor: pointer; outline: 0px" tabindex="0" width="484"/><br/></div>
@@ -20,11 +19,11 @@ html = """
 
 
 def test_fix_img():
-    target = FixImg(html, 'p1-')
+    target = FixImg(_html, 'p1-')
 
-    only_new_alt = [link.new_alt for link in target.links]
+    assert target.links.new_alt_list == [link.new_alt for link in target.links]
 
-    assert only_new_alt == [
+    assert target.links.new_alt_list == [
         'p1-image-00.png',
         'p1-logger-levels.gif',
         'p1-image-01.png',
@@ -32,12 +31,21 @@ def test_fix_img():
 
 
 def test_src():
-    target = FixImg(html, 'p1-')
+    target = FixImg(_html, 'p1-')
 
-    only_src = [link.src for link in target.links]
+    assert target.links.only_src_list == [link.src for link in target.links]
 
-    assert only_src == [
+    assert target.links.only_src_list == [
         'https://wwwpy.dev/1',
         'https://wwwpy.dev/2',
         'https://wwwpy.dev/3',
     ]
+
+
+def test_no_src_and_no_alt_should_not_fail():
+    html = "<br><img width='3'><hr><img width='4'>"
+
+    target = FixImg(html, 'p1-')
+
+    assert target.links.new_alt_list == ['', '']
+    assert target.links.only_src_list == ['', '']

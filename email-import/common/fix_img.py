@@ -1,15 +1,27 @@
 from dataclasses import dataclass, field
 import re
-from collections import defaultdict
+from collections import defaultdict, UserList
+from typing import Tuple
 
 
 @dataclass
 class Link:
     new_alt: str
     src: str
+    location: Tuple[int, int] = (0, 0)
 
 
-def compute_links(html, resource_prefix) -> list[Link]:
+class Links(UserList[Link]):
+    @property
+    def new_alt_list(self) -> list[str]:
+        return [link.new_alt for link in self.data]
+
+    @property
+    def only_src_list(self) -> list[str]:
+        return [link.src for link in self.data]
+
+
+def compute_links(html, resource_prefix) -> Links[Link]:
     # Find all <img ... alt="..." ... src="..."> tags
     img_tags = re.findall(r'<img [^>]*alt="([^"]+)"[^>]*src="([^"]+)"[^>]*>', html)
     alt_counts = defaultdict(int)
@@ -26,14 +38,14 @@ def compute_links(html, resource_prefix) -> list[Link]:
         else:
             new_alt = f"{resource_prefix}{alt}"
         result.append(Link(new_alt, src))
-    return result
+    return Links(result)
 
 
 @dataclass
 class FixImg:
     html: str
     resource_prefix: str
-    links: list[Link] = field(default_factory=list)
+    links: Links[Link] = field(default_factory=Links)
 
     def __post_init__(self):
         self.links = compute_links(self.html, self.resource_prefix)
