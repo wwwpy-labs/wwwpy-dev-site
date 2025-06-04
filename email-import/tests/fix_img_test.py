@@ -60,8 +60,13 @@ def test_location():
 
 
 def test_new_html__plain_case():
-    html = "<br><img alt='image.png' src='https://wwwpy.dev/1'><link>"
+    html = ("<br><img alt='image.png' src='https://wwwpy.dev/1'><link>"
+            "<br><img alt='image.png' src='https://wwwpy.dev/2'>uff")
     target = FixImg(html, 'p1-')
 
     # we generate an img with only the new src
-    assert target.new_html == '<br><img src="p1-image-00.png"><link>'
+    # assert target.new_html == '<br><img src="p1-image-00.png"><link>'
+    assert target.new_html == (
+        '<br><img src="p1-image-00.png"><link>'
+        '<br><img src="p1-image-01.png">uff'
+    )

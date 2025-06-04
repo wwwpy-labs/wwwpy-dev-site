@@ -58,11 +58,23 @@ def compute_calculated_fields(fix_img: FixImg) -> None:
     for alt, src, location in img_info:
         if alt and alt_counts[alt] > 1:
             idx = alt_indices[alt]
-            new_alt = f"{resource_prefix}{alt.replace('.', f'-{idx:02}.')}"
+            new_src = f"{resource_prefix}{alt.replace('.', f'-{idx:02}.')}"
             alt_indices[alt] += 1
         elif alt:
-            new_alt = f"{resource_prefix}{alt}"
+            new_src = f"{resource_prefix}{alt}"
         else:
-            new_alt = ''
-        result.append(Link(new_alt, src, location))
+            new_src = ''
+        result.append(Link(new_src, src, location))
     fix_img.links = Links(result)
+
+    # Generate new_html: replace each <img ...> with <img src="new_src">
+    new_html_parts = []
+    last_idx = 0
+    for link in fix_img.links:
+        start, end = link.location
+        new_html_parts.append(html[last_idx:start])
+        new_html_parts.append(f'<img src="{link.new_src}">')
+        last_idx = end
+    new_html_parts.append(html[last_idx:])
+    fix_img.new_html = ''.join(new_html_parts)
+
