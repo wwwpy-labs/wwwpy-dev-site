@@ -82,13 +82,18 @@ def compute_calculated_fields(fix_img: FixImg) -> None:
         result.append(Link(new_src, src, location, width, height))
     fix_img.links = Links(result)
 
-    # Generate new_html: replace each <img ...> with <img src="new_src">
+    # Generate new_html: replace each <img ...> with <img src="new_src" width="..." height="...">
     new_html_parts = []
     last_idx = 0
     for link in fix_img.links:
         start, end = link.location
         new_html_parts.append(html[last_idx:start])
-        new_html_parts.append(f'<img src="{link.new_src}">')
+        attrs = [f'src="{link.new_src}"']
+        if link.width:
+            attrs.append(f'width="{link.width}"')
+        if link.height:
+            attrs.append(f'height="{link.height}"')
+        new_html_parts.append(f'<img {" ".join(attrs)}>')
         last_idx = end
     new_html_parts.append(html[last_idx:])
     fix_img.new_html = ''.join(new_html_parts)
