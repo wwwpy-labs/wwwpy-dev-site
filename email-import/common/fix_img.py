@@ -22,21 +22,28 @@ class Links(UserList[Link]):
 
 
 def compute_links(html, resource_prefix) -> Links[Link]:
-    # Find all <img ... alt="..." ... src="..."> tags
-    img_tags = re.findall(r'<img [^>]*alt="([^"]+)"[^>]*src="([^"]+)"[^>]*>', html)
+    # Find all <img ...> tags
+    img_tags = re.findall(r'<img[^>]*>', html)
     alt_counts = defaultdict(int)
     alt_indices = defaultdict(int)
-    # Count occurrences of each alt
-    for alt, _ in img_tags:
+    img_info = []
+    for tag in img_tags:
+        alt_match = re.search(r'alt=["\']([^"\']*)["\']', tag)
+        src_match = re.search(r'src=["\']([^"\']*)["\']', tag)
+        alt = alt_match.group(1) if alt_match else ''
+        src = src_match.group(1) if src_match else ''
+        img_info.append((alt, src))
         alt_counts[alt] += 1
     result = []
-    for alt, src in img_tags:
-        if alt_counts[alt] > 1:
+    for alt, src in img_info:
+        if alt and alt_counts[alt] > 1:
             idx = alt_indices[alt]
             new_alt = f"{resource_prefix}{alt.replace('.', f'-{idx:02}.')}"
             alt_indices[alt] += 1
-        else:
+        elif alt:
             new_alt = f"{resource_prefix}{alt}"
+        else:
+            new_alt = ''
         result.append(Link(new_alt, src))
     return Links(result)
 
