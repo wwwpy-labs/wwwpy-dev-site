@@ -6,11 +6,12 @@ from typing import Tuple
 
 @dataclass
 class Link:
-    new_src: str
+    alt: str
     src: str
     location: Tuple[int, int]
-    width: str = ''
-    height: str = ''
+    width: str
+    height: str
+    new_src: str
 
 
 class Links(UserList[Link]):
@@ -81,7 +82,7 @@ def compute_calculated_fields(fix_img: FixImg) -> None:
             new_src = f"{resource_prefix}{alt}"
         else:
             new_src = ''
-        result.append(Link(new_src, src, location, width, height))
+        result.append(Link(alt, src, location, width, height, new_src))
     fix_img.links = Links(result)
 
     # Generate new_html: replace each <img ...> with <img src="new_src" width="..." height="...">
