@@ -17,8 +17,10 @@ def main():
             content = item.read_text()
             clean_content = cleanup(content)
             fix_img = FixImg(clean_content, resource_prefix=item.stem + '--')
-            item_tmp = Path(cleanup_tmp) / item.name
-            item_tmp.write_text(fix_img.new_html)
+            generated_item = Path(cleanup_tmp) / item.name
+            generated_item.write_text(fix_img.new_html)
+            if fix_img.recap_img_html:
+                generated_item.with_suffix('.img-recap.html').write_text(fix_img.recap_img_html)
 
     commit_folder(cleanup_tmp, uploads)
 

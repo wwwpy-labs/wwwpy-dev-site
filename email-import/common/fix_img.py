@@ -44,15 +44,14 @@ class FixImg:
 
     @property
     def recap_img_html(self) -> str:
-        # Recap: <img src="original_src" alt="new_src" width="..." height="...">
         parts = []
         for link in self.links:
-            attrs = [f'src="{link.src}"', f'alt="{link.new_src}"']
-            if link.width:
-                attrs.append(f'width="{link.width}"')
-            if link.height:
-                attrs.append(f'height={link.height}"')
-            parts.append(f'<img {" ".join(attrs)}>')
+            parts.append(f'<div>{link.new_src}</div>')
+
+            start, end = link.location
+            original_link = self.html[start:end]
+            parts.append(original_link)
+
         return "\n".join(parts)
 
 
