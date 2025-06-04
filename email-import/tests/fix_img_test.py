@@ -23,8 +23,21 @@ def test_fix_img():
     target = FixImg(html, 'p1-')
 
     only_new_alt = [link.new_alt for link in target.links]
+
     assert only_new_alt == [
         'p1-image-00.png',
         'p1-logger-levels.gif',
         'p1-image-01.png',
+    ]
+
+
+def test_src():
+    target = FixImg(html, 'p1-')
+
+    only_src = [link.src for link in target.links]
+
+    assert only_src == [
+        'https://wwwpy.dev/1',
+        'https://wwwpy.dev/2',
+        'https://wwwpy.dev/3',
     ]

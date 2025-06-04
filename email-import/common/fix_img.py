@@ -5,6 +5,7 @@ from collections import defaultdict
 @dataclass
 class Link:
     new_alt: str
+    src: str = ''
 
 
 def compute_links(html, resource_prefix) -> list[Link]:
