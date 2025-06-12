@@ -58,7 +58,7 @@ def cleanup(content: str, remove_vals: dict | None = None) -> str:
             del tag['style']
     uff = str(soup)
     uff = uff.replace(u'\xa0', u' ')
-    uff = bs4.BeautifulSoup(uff, preserve_whitespace_tags=["p"])
+    # uff = bs4.BeautifulSoup(uff, preserve_whitespace_tags=["p"])
     # document_root = html.fromstring(uff)
     # uff = etree.tostring(document_root, encoding='unicode', pretty_print=True)
     return str(uff)
