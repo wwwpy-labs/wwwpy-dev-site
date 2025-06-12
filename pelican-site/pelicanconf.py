@@ -35,3 +35,8 @@ DEFAULT_PAGINATION = 10
 # RELATIVE_URLS = True
 
 THEME = 'themes/blue-penguin-dark'
+
+
+
+STATIC_PATHS = ['.']
+EXCLUDE_PATTERNS = ['*.md']
