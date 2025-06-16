@@ -14,8 +14,8 @@
     uv sync
     ```
 
-3. Build the site:
-
+3. Build the site (development):
+ 
     ```bash
     source .venv/bin/activate
     cd pelican-site
@@ -23,3 +23,9 @@
     pelican --listen
     ```
 
+4. Publish the site (production):
+    ```bash
+    source .venv/bin/activate
+    cd pelican-site
+    pelican content -s publishconf.py    
+    ```

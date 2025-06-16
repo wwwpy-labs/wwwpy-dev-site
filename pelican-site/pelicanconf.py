@@ -40,3 +40,7 @@ THEME = 'themes/blue-penguin-dark'
 
 STATIC_PATHS = ['.']
 EXCLUDE_PATTERNS = ['*.md']
+
+
+RELATIVE_URLS = True
+OUTPUT_PATH = 'output/news/'
